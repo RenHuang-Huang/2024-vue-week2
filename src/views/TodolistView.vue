@@ -1,62 +1,83 @@
 <template>
-  <h2>註冊</h2>
-  <label for="Email">信箱：</label>
-  <input type="email" name="Email" placeholder="Email" v-model="regestEmail" />
-  <br />
-  <label for="Password">密碼：</label>
-  <input type="password" name="Password" placeholder="Password" v-model="regestPassword" />
-  <br />
-  <label for="Nickname">名稱：</label>
-  <input type="text" name="Nickname" placeholder="Nickname" v-model="regestNickname" />
-  <br />
-  <button type="button" v-on:click="regest">註冊</button>
-  Token：{{ regestToken }}
-  <hr />
+  <!-- 註冊 -->
+  <template v-if="pageRegestStatus">
+    <div class="page">
+      <h2>註冊</h2>
+      <label for="Email">信箱：</label>
+      <input type="email" name="Email" placeholder="Email" v-model="regestEmail" />
+      <br />
+      <label for="Password">密碼：</label>
+      <input type="password" name="Password" placeholder="Password" v-model="regestPassword" />
+      <br />
+      <label for="Nickname">名稱：</label>
+      <input type="text" name="Nickname" placeholder="Nickname" v-model="regestNickname" />
+      <br />
+      <button type="button" v-on:click="regest">註冊</button>
+      <button type="button" v-on:click="switchPage">我要登入</button>
+      <!-- Token：{{ regestToken }} -->
+      <hr />
+    </div>
+  </template>
 
-  <h2>登入</h2>
-  <label for="email">信箱：</label>
-  <input type="text" name="email" placeholder="Email" v-model="loginEmail" />
-  <br />
-  <label for="password">密碼：</label>
-  <input type="password" name="password" placeholder="Password" v-model="loginPassword" />
-  <br />
-  <button type="button" v-on:click="login">登入</button>
-  Token:{{ loginToken }}
-  <hr />
-
-  <h2>驗證</h2>
-  <label for="token">驗證：</label>
-  <input type="text" name="token" placeholder="Token" v-model="checkoutToken" />
-  <button type="button" v-on:click="checkout">驗證</button>
-  <br />
-  <p v-if="loginStatus">{{ loginStatus }}</p>
-  <hr />
-
-  <h2>登出</h2>
-  <label for="signout">登出：</label>
-  <input type="text" name="signout" placeholder="Sign Out" v-model="signOutToken" />
-  <button type="button" v-on:click="signOut">登出</button>
-  <br />
-  <p v-if="signOutStatus">{{ signOutStatus }}</p>
-  <hr />
-
-  <h2>待辦清單</h2>
-  <input type="text" name="newtodo" placeholder="New Todo" v-model="newTodo" />
-  <button type="button" v-on:click="addTodo">Add Todo</button>
-  <ul>
-    <li v-for="todo in todos" v-bind:key="todo.id">
-      {{ todo.content }} | {{ todo.status ? '已完成' : '未完成' }}
-      <input type="text" placeholder="New Name" @change="updateEdit($event, todo.id)" />
-      <button type="button" v-on:click="onUpdated(todo.id)">更新</button>
-      <button type="button" v-on:click="onDelected(todo.id)">刪除</button>
-      <button type="button" v-on:click="onFinished(todo.id)">更新狀態</button>
-    </li>
-  </ul>
+  <!-- 登入 -->
+  <template v-if="pageLoginStatus">
+    <div class="page">
+      <h2>登入</h2>
+      <label for="email">信箱：</label>
+      <input type="text" name="email" placeholder="Email" v-model="loginEmail" />
+      <br />
+      <label for="password">密碼：</label>
+      <input type="password" name="password" placeholder="Password" v-model="loginPassword" />
+      <br />
+      <button type="button" v-on:click="login">登入</button>
+      <button type="button" v-on:click="switchPage">我要註冊</button>
+      <!-- Token:{{ loginToken }} -->
+      <hr />
+      <!-- 
+      <h2>驗證</h2>
+      <label for="token">驗證：</label>
+      <input type="text" name="token" placeholder="Token" v-model="checkoutToken" />
+      <button type="button" v-on:click="checkout">驗證</button>
+      <br />
+      <p v-if="loginStatus">{{ loginStatus }}</p>
+      <hr />
+  
+      <h2>登出</h2>
+      <label for="signout">登出：</label>
+      <input type="text" name="signout" placeholder="Sign Out" v-model="signOutToken" />
+      <button type="button" v-on:click="signOut">登出</button>
+      <br />
+      <p v-if="signOutStatus">{{ signOutStatus }}</p>
+      <hr /> -->
+    </div>
+  </template>
+  <!-- 待辦清單 -->
+  <template v-if="pageTodoStatus">
+    <div class="page">
+      <h2>待辦清單</h2>
+      <label for="newtodo">新增待辦：</label>
+      <input type="text" name="newtodo" placeholder="New Todo" v-model="newTodo" />
+      <button type="button" v-on:click="addTodo">Add Todo</button>
+      <br />
+      <h3>待辦事項：</h3>
+      <ul>
+        <li v-for="todo in todos" v-bind:key="todo.id">
+          {{ todo.content }} | {{ todo.status ? '已完成' : '未完成' }}
+          <input type="text" placeholder="New Name" @change="updateEdit($event, todo.id)" />
+          <button type="button" v-on:click="onUpdated(todo.id)">更新</button>
+          <button type="button" v-on:click="onDelected(todo.id)">刪除</button>
+          <button type="button" v-on:click="onFinished(todo.id)">更新狀態</button>
+        </li>
+      </ul>
+      <hr />
+      <button type="button" v-on:click="signOut2" class="center">登出</button>
+    </div>
+  </template>
 </template>
 
 <script setup>
 import axios from 'axios'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const apiUrl = 'https://todolist-api.hexschool.io'
 
 const regestEmail = ref('')
@@ -76,6 +97,10 @@ const signOutToken = ref('')
 const signOutStatus = ref('')
 
 const newTodo = ref('')
+
+const pageLoginStatus = ref(true)
+const pageRegestStatus = ref(false)
+const pageTodoStatus = ref(false)
 const regest = async () => {
   try {
     await axios
@@ -86,6 +111,7 @@ const regest = async () => {
       })
       .then((res) => {
         console.log(res.data)
+        alert('註冊成功')
         regestEmail.value = ''
         regestPassword.value = ''
         regestNickname.value = ''
@@ -97,7 +123,6 @@ const regest = async () => {
 }
 
 const login = async () => {
-  // console.log('login')
   try {
     await axios
       .post(`${apiUrl}/users/sign_in`, {
@@ -109,7 +134,9 @@ const login = async () => {
         loginEmail.value = ''
         loginPassword.value = ''
         loginToken.value = res.data.token
+        document.cookie = `todolistToken=${res.data.token}`
         getTodo()
+        switchTodoPage()
       })
   } catch (error) {
     console.log(error)
@@ -153,6 +180,24 @@ const signOut = async () => {
   }
 }
 
+const signOut2 = async () => {
+  try {
+    const config = {
+      headers: {
+        Authorization: loginToken.value
+      }
+    }
+    await axios.post(`${apiUrl}/users/sign_out`, {}, config).then((res) => {
+      signOutStatus.value = res.data.message
+      console.log(res.data)
+      pageTodoStatus.value = false
+      pageLoginStatus.value = true
+    })
+  } catch (error) {
+    console.log(error)
+    signOutStatus.value = error.response.data.message
+  }
+}
 const addTodo = async () => {
   if (!newTodo.value) return alert('請輸入待辦事項')
   if (!loginToken.value) return alert('請先登入')
@@ -246,4 +291,42 @@ const onFinished = async (id) => {
     console.log(error)
   }
 }
+
+const myCookie = document.cookie.replace(
+  /(?:(?:^|.*;\s*)todolistToken\s*\=\s*([^;]*).*$)|^.*$/,
+  '$1'
+)
+
+const switchPage = () => {
+  pageLoginStatus.value = !pageLoginStatus.value
+  pageRegestStatus.value = !pageRegestStatus.value
+}
+const switchTodoPage = () => {
+  pageLoginStatus.value = false
+  pageRegestStatus.value = false
+  pageTodoStatus.value = true
+}
+onMounted(() => {
+  if (myCookie) {
+    loginToken.value = myCookie
+    switchTodoPage()
+    getTodo()
+  }
+})
 </script>
+
+<style>
+h2 {
+  margin: 0;
+  text-align: center;
+}
+.page {
+  margin: 0 auto;
+  width: 50%;
+  background-color: aquamarine;
+}
+.center {
+  display: block;
+  margin: 0 auto;
+}
+</style>
