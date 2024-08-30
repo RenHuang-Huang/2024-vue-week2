@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -21,6 +20,11 @@ const router = createRouter({
       path: '/todolist',
       name: 'todolist',
       component: () => import('../views/TodolistView.vue')
+    },
+    {
+      path: '/possystem',
+      name: 'possystem',
+      component: () => import('../views/PossystemView.vue')
     }
   ]
 })
