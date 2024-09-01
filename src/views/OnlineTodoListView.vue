@@ -19,6 +19,7 @@ onMounted(() => {
     alert('請先登入')
     router.push({ path: '/login' })
   } else {
+    axios.defaults.headers.common['Authorization'] = todolistToken
     checkout()
     getTodo()
   }
@@ -28,12 +29,7 @@ onMounted(() => {
 const userName = ref('貴賓')
 const checkout = async () => {
   try {
-    const config = {
-      headers: {
-        Authorization: todolistToken
-      }
-    }
-    await axios.get(`${apiUrl}/users/checkout`, config).then((res) => {
+    await axios.get(`${apiUrl}/users/checkout`).then((res) => {
       if (res.data.nickname.trim() === '') {
         userName.value = '貴賓'
       } else {
@@ -49,12 +45,7 @@ const checkout = async () => {
 const logout = async () => {
   isLoading.value = true
   try {
-    const config = {
-      headers: {
-        Authorization: todolistToken
-      }
-    }
-    await axios.post(`${apiUrl}/users/sign_out`, {}, config).then((res) => {
+    await axios.post(`${apiUrl}/users/sign_out`, {}).then((res) => {
       alert(res.data.message)
       document.cookie = 'todolistToken=;Max-Age=-1;'
       router.push({ path: '/login' })
@@ -70,13 +61,9 @@ const todos = ref([])
 const needTodoCount = ref([])
 const getTodo = async () => {
   isLoading.value = true
+  console.log('todolistToken')
   try {
-    const config = {
-      headers: {
-        Authorization: todolistToken
-      }
-    }
-    await axios.get(`${apiUrl}/todos`, config).then((res) => {
+    await axios.get(`${apiUrl}/todos`).then((res) => {
       todos.value = res.data.data
       setTab(currentTab.value)
       needTodoCount.value = res.data.data.filter((todo) => todo.status === false).length
@@ -94,12 +81,7 @@ const addTodo = async () => {
   if (!newTodo.value.trim()) return alert('請輸入待辦事項')
   if (!token) return alert('請先登入')
   try {
-    const config = {
-      headers: {
-        Authorization: token
-      }
-    }
-    await axios.post(`${apiUrl}/todos`, { content: newTodo.value }, config).then((res) => {
+    await axios.post(`${apiUrl}/todos`, { content: newTodo.value }).then((res) => {
       newTodo.value = ''
       getTodo()
     })
@@ -109,12 +91,7 @@ const addTodo = async () => {
 // 刪除待辦
 const handelDeleteTodo = async (id) => {
   try {
-    const config = {
-      headers: {
-        Authorization: todolistToken
-      }
-    }
-    await axios.delete(`${apiUrl}/todos/${id}`, config).then((res) => {
+    await axios.delete(`${apiUrl}/todos/${id}`).then((res) => {
       getTodo()
     })
   } catch (error) {
@@ -126,12 +103,7 @@ const handelDeleteTodo = async (id) => {
 const handelFinishedTodo = async (id) => {
   needTodoCount.value = todos.value.filter((todo) => todo.status === false).length
   try {
-    const config = {
-      headers: {
-        Authorization: todolistToken
-      }
-    }
-    await axios.patch(`${apiUrl}/todos/${id}/toggle`, {}, config).then((res) => {
+    await axios.patch(`${apiUrl}/todos/${id}/toggle`, {}).then((res) => {
       getTodo()
     })
   } catch (error) {}
