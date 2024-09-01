@@ -91,6 +91,7 @@ const signUp = async () => {
             name="name"
             id="name"
             placeholder="請輸入您的暱稱"
+            required
             v-model="signUpName"
             v-on:change="signUpNameActive = true"
           />
