@@ -2,11 +2,16 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
+const isLoading = ref(false)
+
 const email = ref('')
 const password = ref('')
 const apiUrl = 'https://todolist-api.hexschool.io'
 const router = useRouter()
-
+const emailActive = ref(false)
+const passwordActive = ref(false)
 const login = async () => {
   if (!email.value) {
     alert('請輸入 email')
@@ -16,8 +21,7 @@ const login = async () => {
     alert('請輸入密碼')
     return
   }
-  console.log('email:', email.value)
-  console.log('password:', password.value)
+  isLoading.value = true
   try {
     await axios
       .post(`${apiUrl}/users/sign_in`, {
@@ -25,22 +29,21 @@ const login = async () => {
         password: password.value
       })
       .then((res) => {
-        console.log(res.data)
         email.value = ''
         password.value = ''
-        console.log('token:', res.data.token)
         document.cookie = `todolistToken=${res.data.token}`
         router.push({ path: '/todolist' })
-        // getTodo()
-        // switchTodoPage()
       })
   } catch (error) {
-    console.log(error)
     alert('登入失敗：' + error.response.data.message)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
+
 <template>
+  <loading :active.sync="isLoading" :is-full-page="true"></loading>
   <!-- login_page -->
   <div id="loginPage" class="bg-yellow">
     <div class="conatiner loginPage vhContainer">
@@ -69,8 +72,9 @@ const login = async () => {
             name="email"
             placeholder="請輸入 email"
             required
+            v-on:change="emailActive = true"
           />
-          <span v-if="!email">此欄位不可留空</span>
+          <span v-if="emailActive && !email">此欄位不可留空</span>
           <label class="formControls_label" for="pwd">密碼</label>
           <input
             class="formControls_input"
@@ -80,8 +84,9 @@ const login = async () => {
             placeholder="請輸入密碼"
             required
             v-model="password"
+            v-on:change="passwordActive = true"
           />
-          <span v-if="password.length < 6">密碼不得少於6個字</span>
+          <span v-if="passwordActive && password.length < 6">密碼不得少於6個字</span>
           <input
             class="formControls_btnSubmit"
             type="button"

@@ -3,6 +3,10 @@ import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import TodoList from '@/components/TodoList.vue'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
+const isLoading = ref(false)
+
 const apiUrl = 'https://todolist-api.hexschool.io'
 const router = useRouter()
 const todolistToken = document.cookie.replace(
@@ -30,7 +34,11 @@ const checkout = async () => {
       }
     }
     await axios.get(`${apiUrl}/users/checkout`, config).then((res) => {
-      userName.value = res.data.nickname
+      if (res.data.nickname.trim() === '') {
+        userName.value = '貴賓'
+      } else {
+        userName.value = res.data.nickname
+      }
     })
   } catch (error) {
     alert(`驗證失敗： ${error.message}`)
@@ -39,6 +47,7 @@ const checkout = async () => {
 
 //登出
 const logout = async () => {
+  isLoading.value = true
   try {
     const config = {
       headers: {
@@ -51,7 +60,8 @@ const logout = async () => {
       router.push({ path: '/login' })
     })
   } catch (error) {
-    console.log(error)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -59,6 +69,7 @@ const logout = async () => {
 const todos = ref([])
 const needTodoCount = ref([])
 const getTodo = async () => {
+  isLoading.value = true
   try {
     const config = {
       headers: {
@@ -66,13 +77,13 @@ const getTodo = async () => {
       }
     }
     await axios.get(`${apiUrl}/todos`, config).then((res) => {
-      console.log(res.data.data)
       todos.value = res.data.data
       setTab(currentTab.value)
       needTodoCount.value = res.data.data.filter((todo) => todo.status === false).length
     })
   } catch (error) {
-    console.log(error)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -80,8 +91,7 @@ const getTodo = async () => {
 const newTodo = ref('')
 const addTodo = async () => {
   const token = todolistToken
-  console.log(token)
-  if (!newTodo.value) return alert('請輸入待辦事項')
+  if (!newTodo.value.trim()) return alert('請輸入待辦事項')
   if (!token) return alert('請先登入')
   try {
     const config = {
@@ -90,13 +100,10 @@ const addTodo = async () => {
       }
     }
     await axios.post(`${apiUrl}/todos`, { content: newTodo.value }, config).then((res) => {
-      console.log(res.data)
       newTodo.value = ''
       getTodo()
     })
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 }
 
 // 刪除待辦
@@ -108,12 +115,10 @@ const handelDeleteTodo = async (id) => {
       }
     }
     await axios.delete(`${apiUrl}/todos/${id}`, config).then((res) => {
-      console.log(res.data)
       getTodo()
     })
   } catch (error) {
     alert(`刪除失敗 ${error.response.data.message}`)
-    console.log(error)
   }
 }
 
@@ -127,12 +132,9 @@ const handelFinishedTodo = async (id) => {
       }
     }
     await axios.patch(`${apiUrl}/todos/${id}/toggle`, {}, config).then((res) => {
-      console.log(res.data)
       getTodo()
     })
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 }
 
 // 切換分類
@@ -150,6 +152,7 @@ const setTab = (tab) => {
 }
 </script>
 <template>
+  <loading :active.sync="isLoading" :is-full-page="true"></loading>
   <!-- ToDo List -->
   <div id="todoListPage" class="bg-half">
     <nav>
@@ -164,7 +167,7 @@ const setTab = (tab) => {
       <ul>
         <li class="todo_sm">
           <a
-            ><span>{{ userName }}的代辦</span></a
+            ><span>{{ userName ? userName : '貴賓' }}的代辦</span></a
           >
         </li>
         <li><a v-on:click.prevent="logout" style="cursor: pointer">登出</a></li>

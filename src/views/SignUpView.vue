@@ -2,6 +2,10 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
+const isLoading = ref(false)
+
 const signUpEmail = ref('')
 const signUpName = ref('')
 const signUpPassword = ref('')
@@ -10,7 +14,10 @@ const apiUrl = 'https://todolist-api.hexschool.io'
 const regestToken = ref('')
 const errorMsg = ref('')
 const router = useRouter()
-
+const signUpNameActive = ref(false)
+const signUpEmailActive = ref(false)
+const signUpPasswordActive = ref(false)
+const signUpPassword2Active = ref(false)
 const signUp = async () => {
   errorMsg.value = ''
   if (!signUpEmail.value || !signUpName.value || !signUpPassword.value || !signUpPassword2.value) {
@@ -21,7 +28,7 @@ const signUp = async () => {
     alert('密碼不一致')
     return
   }
-  console.log(signUpEmail.value, signUpName.value, signUpPassword.value, signUpPassword2.value)
+  isLoading.value = true
   try {
     await axios
       .post(`${apiUrl}/users/sign_up`, {
@@ -30,21 +37,22 @@ const signUp = async () => {
         nickname: signUpName.value
       })
       .then((res) => {
-        console.log(res.data)
         alert('註冊成功')
         signUpEmail.value = ''
         signUpPassword.value = ''
         signUpName.value = ''
         regestToken.value = res.data.uid
-        console.log(regestToken.value)
         router.push({ path: '/login' })
       })
   } catch (error) {
     alert(error.response.data.message + ' 請重新嘗試')
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
 <template>
+  <loading :active.sync="isLoading" :is-full-page="true"></loading>
   <!-- sign up -->
   <div id="signUpPage" class="bg-yellow">
     <div class="conatiner signUpPage vhContainer">
@@ -73,7 +81,9 @@ const signUp = async () => {
             placeholder="請輸入 email"
             required
             v-model="signUpEmail"
+            v-on:change="signUpEmailActive = true"
           />
+          <span v-if="signUpEmailActive && !signUpEmail">此欄位不可留空</span>
           <label class="formControls_label" for="name">您的暱稱</label>
           <input
             class="formControls_input"
@@ -82,7 +92,9 @@ const signUp = async () => {
             id="name"
             placeholder="請輸入您的暱稱"
             v-model="signUpName"
+            v-on:change="signUpNameActive = true"
           />
+          <span v-if="signUpNameActive && !signUpName">此欄位不可留空</span>
           <label class="formControls_label" for="pwd">密碼</label>
           <input
             class="formControls_input"
@@ -92,7 +104,9 @@ const signUp = async () => {
             placeholder="請輸入密碼"
             required
             v-model="signUpPassword"
+            v-on:change="signUpPasswordActive = true"
           />
+          <span v-if="signUpPasswordActive && !signUpPassword">此欄位不可留空</span>
           <label class="formControls_label" for="pwd2">再次輸入密碼</label>
           <input
             class="formControls_input"
@@ -102,7 +116,9 @@ const signUp = async () => {
             placeholder="請再次輸入密碼"
             required
             v-model="signUpPassword2"
+            v-on:change="signUpPassword2Active = true"
           />
+          <span v-if="signUpPassword2Active && !signUpPassword2">此欄位不可留空</span>
           <input
             class="formControls_btnSubmit"
             type="button"
