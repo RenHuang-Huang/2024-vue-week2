@@ -102,8 +102,7 @@ const submit = () => {
               v-bind:name="item.name"
               v-bind:price="item.price"
               v-bind:description="item.description"
-              v-on:add-to-cart="handleAddToCart(item)"
-            />
+              v-on:add-to-cart="handleAddToCart(item)" />
           </div>
         </div>
 
@@ -129,8 +128,7 @@ const submit = () => {
                   v-bind:price="item.price"
                   v-bind:quantity="item.quantity"
                   v-on:update-quantity="handleUpdateQuantity"
-                  v-on:delete-item="handleDeleteItem"
-                />
+                  v-on:delete-item="handleDeleteItem" />
               </tr>
             </tbody>
           </table>
@@ -179,8 +177,7 @@ const submit = () => {
                         <Order
                           v-bind:name="item.name"
                           v-bind:quantity="item.quantity"
-                          v-bind:price="item.price"
-                        />
+                          v-bind:price="item.price" />
                       </tr>
                     </tbody>
                   </table>

@@ -158,8 +158,7 @@ const setTab = (tab) => {
           <img
             src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/empty%201.png"
             alt=""
-            style="width: 80%"
-          />
+            style="width: 80%" />
         </div>
         <div class="todoList_list" v-if="todos.length !== 0">
           <ul class="todoList_tab">
@@ -187,8 +186,7 @@ const setTab = (tab) => {
                 v-bind:status="todo.status"
                 v-bind:id="todo.id"
                 v-on:delete-todo="handelDeleteTodo"
-                v-on:finished-todo="handelFinishedTodo"
-              />
+                v-on:finished-todo="handelFinishedTodo" />
             </ul>
             <div class="todoList_statistics">
               <p>{{ needTodoCount }} 個待完成項目</p>

@@ -66,8 +66,7 @@ const signUp = async () => {
         <img
           class="d-m-n"
           src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/img.png"
-          alt="workImg"
-        />
+          alt="workImg" />
       </div>
       <div>
         <form class="formControls">
@@ -81,8 +80,7 @@ const signUp = async () => {
             placeholder="請輸入 email"
             required
             v-model="signUpEmail"
-            v-on:change="signUpEmailActive = true"
-          />
+            v-on:change="signUpEmailActive = true" />
           <span v-if="signUpEmailActive && !signUpEmail">此欄位不可留空</span>
           <label class="formControls_label" for="name">您的暱稱</label>
           <input
@@ -93,8 +91,7 @@ const signUp = async () => {
             placeholder="請輸入您的暱稱"
             required
             v-model="signUpName"
-            v-on:change="signUpNameActive = true"
-          />
+            v-on:change="signUpNameActive = true" />
           <span v-if="signUpNameActive && !signUpName">此欄位不可留空</span>
           <label class="formControls_label" for="pwd">密碼</label>
           <input
@@ -105,8 +102,7 @@ const signUp = async () => {
             placeholder="請輸入密碼"
             required
             v-model="signUpPassword"
-            v-on:change="signUpPasswordActive = true"
-          />
+            v-on:change="signUpPasswordActive = true" />
           <span v-if="signUpPasswordActive && !signUpPassword">此欄位不可留空</span>
           <label class="formControls_label" for="pwd2">再次輸入密碼</label>
           <input
@@ -117,15 +113,13 @@ const signUp = async () => {
             placeholder="請再次輸入密碼"
             required
             v-model="signUpPassword2"
-            v-on:change="signUpPassword2Active = true"
-          />
+            v-on:change="signUpPassword2Active = true" />
           <span v-if="signUpPassword2Active && !signUpPassword2">此欄位不可留空</span>
           <input
             class="formControls_btnSubmit"
             type="button"
             value="註冊帳號"
-            v-on:click.prevent="signUp"
-          />
+            v-on:click.prevent="signUp" />
           <a class="formControls_btnLink" href="./#/login">登入</a>
           <span v-if="errorMsg">{{ errorMsg }}</span>
         </form>

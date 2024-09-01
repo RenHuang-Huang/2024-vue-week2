@@ -21,8 +21,7 @@ const finishedTodo = (id) => {
         class="todoList_input"
         type="checkbox"
         v-bind:checked="status"
-        v-on:change="finishedTodo(id)"
-      />
+        v-on:change="finishedTodo(id)" />
       <span>{{ content }}</span>
     </label>
     <a v-on:click="deleteTodo(id)" style="height: 42px">

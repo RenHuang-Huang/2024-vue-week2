@@ -62,8 +62,7 @@ const emailError = computed(() => {
         <img
           class="d-m-n"
           src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/img.png"
-          alt="workImg"
-        />
+          alt="workImg" />
       </div>
       <div>
         <form class="formControls">
@@ -77,8 +76,7 @@ const emailError = computed(() => {
             name="email"
             placeholder="請輸入 email"
             required
-            v-on:change="emailActive = true"
-          />
+            v-on:change="emailActive = true" />
           <span v-if="emailActive && !email">此欄位不可留空</span>
           <span v-else-if="emailActive && emailError">{{ emailError }}</span>
           <label class="formControls_label" for="pwd">密碼</label>
@@ -90,15 +88,13 @@ const emailError = computed(() => {
             placeholder="請輸入密碼"
             required
             v-model="password"
-            v-on:change="passwordActive = true"
-          />
+            v-on:change="passwordActive = true" />
           <span v-if="passwordActive && password.length < 6">密碼不得少於6個字</span>
           <input
             class="formControls_btnSubmit"
             type="button"
             value="登入"
-            v-on:click.prevent="login"
-          />
+            v-on:click.prevent="login" />
           <a class="formControls_btnLink" href="./#/signUp">註冊帳號</a>
         </form>
       </div>
