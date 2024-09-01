@@ -4,17 +4,13 @@ import stylisticJs from '@stylistic/eslint-plugin-js'
 module.exports = {
   root: true,
   plugins: { '@stylistic/js': stylisticJs },
-  extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    '@vue/eslint-config-prettier/skip-formatting'
-  ],
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/eslint-config-prettier/skip-formatting'],
   parserOptions: {
     ecmaVersion: 'latest'
   },
   rules: {
     'prettier/prettier': [
-      'warn',
+      'error',
       {
         bracketSpacing: true
       }

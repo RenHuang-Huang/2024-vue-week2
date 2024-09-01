@@ -13,7 +13,12 @@ const router = useRouter()
 const emailActive = ref(false)
 const passwordActive = ref(false)
 const login = async () => {
-  if (!email.value || !password.value || emailError.value || password.value.length < 6) {
+  if (
+    !email.value ||
+    !password.value ||
+    emailError.value ||
+    password.value.length < 6
+  ) {
     alert('請填寫正確資料')
     return
   }
@@ -53,12 +58,12 @@ const emailError = computed(() => {
   <div id="loginPage" class="bg-yellow">
     <div class="conatiner loginPage vhContainer">
       <div class="side">
-        <a
-          ><img
+        <a>
+          <img
             class="logoImg"
             src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/logo.png"
-            alt=""
-        /></a>
+            alt="" />
+        </a>
         <img
           class="d-m-n"
           src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/img.png"
@@ -95,7 +100,9 @@ const emailError = computed(() => {
             type="button"
             value="登入"
             v-on:click.prevent="login" />
-          <a class="formControls_btnLink" href="./#/signUp">註冊帳號</a>
+          <RouterLink class="formControls_btnLink" to="/signUp"
+            >註冊帳號</RouterLink
+          >
         </form>
       </div>
     </div>

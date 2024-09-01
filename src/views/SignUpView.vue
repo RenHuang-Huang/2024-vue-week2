@@ -20,7 +20,12 @@ const signUpPasswordActive = ref(false)
 const signUpPassword2Active = ref(false)
 const signUp = async () => {
   errorMsg.value = ''
-  if (!signUpEmail.value || !signUpName.value || !signUpPassword.value || !signUpPassword2.value) {
+  if (
+    !signUpEmail.value ||
+    !signUpName.value ||
+    !signUpPassword.value ||
+    !signUpPassword2.value
+  ) {
     alert('請輸入完整資料')
     return
   }
@@ -57,12 +62,12 @@ const signUp = async () => {
   <div id="signUpPage" class="bg-yellow">
     <div class="conatiner signUpPage vhContainer">
       <div class="side">
-        <a
-          ><img
+        <a>
+          <img
             class="logoImg"
             src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/logo.png"
-            alt=""
-        /></a>
+            alt="" />
+        </a>
         <img
           class="d-m-n"
           src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/img.png"
@@ -75,7 +80,6 @@ const signUp = async () => {
           <input
             class="formControls_input"
             type="text"
-            id="email"
             name="email"
             placeholder="請輸入 email"
             required
@@ -87,7 +91,6 @@ const signUp = async () => {
             class="formControls_input"
             type="text"
             name="name"
-            id="name"
             placeholder="請輸入您的暱稱"
             required
             v-model="signUpName"
@@ -98,23 +101,25 @@ const signUp = async () => {
             class="formControls_input"
             type="password"
             name="pwd"
-            id="pwd"
             placeholder="請輸入密碼"
             required
             v-model="signUpPassword"
             v-on:change="signUpPasswordActive = true" />
-          <span v-if="signUpPasswordActive && !signUpPassword">此欄位不可留空</span>
+          <span v-if="signUpPasswordActive && !signUpPassword"
+            >此欄位不可留空</span
+          >
           <label class="formControls_label" for="pwd2">再次輸入密碼</label>
           <input
             class="formControls_input"
             type="password"
             name="pwd2"
-            id="pwd2"
             placeholder="請再次輸入密碼"
             required
             v-model="signUpPassword2"
             v-on:change="signUpPassword2Active = true" />
-          <span v-if="signUpPassword2Active && !signUpPassword2">此欄位不可留空</span>
+          <span v-if="signUpPassword2Active && !signUpPassword2"
+            >此欄位不可留空</span
+          >
           <input
             class="formControls_btnSubmit"
             type="button"

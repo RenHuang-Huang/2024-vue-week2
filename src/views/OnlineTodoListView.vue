@@ -9,10 +9,7 @@ const isLoading = ref(false)
 
 const apiUrl = 'https://todolist-api.hexschool.io'
 const router = useRouter()
-const todolistToken = document.cookie.replace(
-  /(?:(?:^|.*;\s*)todolistToken\s*\=\s*([^;]*).*$)|^.*$/,
-  '$1'
-)
+const todolistToken = document.cookie.replace(/(?:(?:^|.*;\s*)todolistToken\s*\=\s*([^;]*).*$)|^.*$/, '$1')
 
 onMounted(() => {
   if (!todolistToken) {
@@ -128,19 +125,18 @@ const setTab = (tab) => {
   <!-- ToDo List -->
   <div id="todoListPage" class="bg-half">
     <nav>
-      <!-- <h1><a href="#">ONLINE TODO LIST</a></h1> -->
-      <a
-        ><img
-          class="logoImg"
-          src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/logo.png"
-          alt=""
-          style="width: 45%"
-      /></a>
+      <a>
+        <img 
+        class="logoImg" 
+        src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/logo.png" 
+        alt="" 
+        style="width: 45%" />
+      </a>
       <ul>
         <li class="todo_sm">
-          <a
-            ><span>{{ userName ? userName : '貴賓' }}的代辦</span></a
-          >
+          <a>
+            <span>{{ userName ? userName : '貴賓' }}的代辦</span>
+          </a>
         </li>
         <li><a v-on:click.prevent="logout" style="cursor: pointer">登出</a></li>
       </ul>
@@ -155,10 +151,10 @@ const setTab = (tab) => {
         </div>
         <div class="todoList_empty" v-if="todos.length === 0">
           <p>目前尚無待辦事項</p>
-          <img
-            src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/empty%201.png"
-            alt=""
-            style="width: 80%" />
+          <img 
+          src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/empty%201.png" 
+          alt="" 
+          style="width: 80%" />
         </div>
         <div class="todoList_list" v-if="todos.length !== 0">
           <ul class="todoList_tab">
@@ -166,27 +162,16 @@ const setTab = (tab) => {
               <a v-bind:class="{ active: currentTab === 'all' }" v-on:click="setTab('all')">全部</a>
             </li>
             <li>
-              <a v-bind:class="{ active: currentTab === 'pending' }" v-on:click="setTab('pending')"
-                >待完成</a
-              >
+              <a v-bind:class="{ active: currentTab === 'pending' }" v-on:click="setTab('pending')">待完成</a>
             </li>
             <li>
-              <a
-                v-bind:class="{ active: currentTab === 'completed' }"
-                v-on:click="setTab('completed')"
-                >已完成</a
-              >
+              <a v-bind:class="{ active: currentTab === 'completed' }" v-on:click="setTab('completed')">已完成</a>
             </li>
           </ul>
           <div class="todoList_items">
             <ul class="todoList_item" v-for="todo in tmpTodos" v-bind:key="todo.id">
               <!-- todo -->
-              <TodoList
-                v-bind:content="todo.content"
-                v-bind:status="todo.status"
-                v-bind:id="todo.id"
-                v-on:delete-todo="handelDeleteTodo"
-                v-on:finished-todo="handelFinishedTodo" />
+              <TodoList v-bind:content="todo.content" v-bind:status="todo.status" v-bind:id="todo.id" v-on:delete-todo="handelDeleteTodo" v-on:finished-todo="handelFinishedTodo" />
             </ul>
             <div class="todoList_statistics">
               <p>{{ needTodoCount }} 個待完成項目</p>

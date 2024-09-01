@@ -97,12 +97,12 @@ const submit = () => {
         <!-- 菜單 -->
         <div class="col-md-4">
           <div class="list-group" v-for="item in items" v-bind:key="item.id">
-            <Menu
-              v-bind:id="item.id"
-              v-bind:name="item.name"
-              v-bind:price="item.price"
-              v-bind:description="item.description"
-              v-on:add-to-cart="handleAddToCart(item)" />
+            <Menu 
+            v-bind:id="item.id" 
+            v-bind:name="item.name" 
+            v-bind:price="item.price" 
+            v-bind:description="item.description" 
+            v-on:add-to-cart="handleAddToCart(item)" />
           </div>
         </div>
 
@@ -174,10 +174,10 @@ const submit = () => {
                     </thead>
                     <tbody>
                       <tr v-for="item in order" v-bind:key="item.id">
-                        <Order
-                          v-bind:name="item.name"
-                          v-bind:quantity="item.quantity"
-                          v-bind:price="item.price" />
+                        <Order 
+                        v-bind:name="item.name" 
+                        v-bind:quantity="item.quantity" 
+                        v-bind:price="item.price" />
                       </tr>
                     </tbody>
                   </table>
@@ -190,9 +190,7 @@ const submit = () => {
                       <span>
                         ${{
                           computed(() => {
-                            return order === undefined
-                              ? ''
-                              : order.reduce((acc, item) => acc + item.price * item.quantity, 0)
+                            return order === undefined ? '' : order.reduce((acc, item) => acc + item.price * item.quantity, 0)
                           })
                         }}
                       </span>
