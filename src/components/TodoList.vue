@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue'
-const emits = defineEmits(['delete-todo', 'finished-todo'])
+const emits = defineEmits(['delete-todo', 'completed-todo'])
 const props = defineProps({
   content: String,
   status: Boolean,
@@ -9,8 +9,8 @@ const props = defineProps({
 const deleteTodo = (id) => {
   emits('delete-todo', id)
 }
-const finishedTodo = (id) => {
-  emits('finished-todo', id)
+const completedTodo = (id) => {
+  emits('completed-todo', id)
 }
 </script>
 
@@ -21,7 +21,7 @@ const finishedTodo = (id) => {
         class="todoList_input"
         type="checkbox"
         v-bind:checked="status"
-        v-on:change="finishedTodo(id)" />
+        v-on:change="completedTodo(id)" />
       <span>{{ content }}</span>
     </label>
     <a v-on:click="deleteTodo(id)" style="height: 42px">
