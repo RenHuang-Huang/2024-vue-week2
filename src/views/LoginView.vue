@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
-const isLoading = ref(false)
 
+const isLoading = ref(false)
 const email = ref('')
 const password = ref('')
 const apiUrl = 'https://todolist-api.hexschool.io'
@@ -13,12 +13,8 @@ const router = useRouter()
 const emailActive = ref(false)
 const passwordActive = ref(false)
 const login = async () => {
-  if (!email.value) {
-    alert('請輸入 email')
-    return
-  }
-  if (!password.value) {
-    alert('請輸入密碼')
+  if (!email.value || !password.value || emailError.value || password.value.length < 6) {
+    alert('請填寫正確資料')
     return
   }
   isLoading.value = true
@@ -40,6 +36,15 @@ const login = async () => {
     isLoading.value = false
   }
 }
+
+const emailError = computed(() => {
+  if (!email.value) {
+    return '請輸入Email'
+  } else if (!/\S+@\S+\.\S+/.test(email.value)) {
+    return '請輸入正確格式Email'
+  }
+  return ''
+})
 </script>
 
 <template>
@@ -75,6 +80,7 @@ const login = async () => {
             v-on:change="emailActive = true"
           />
           <span v-if="emailActive && !email">此欄位不可留空</span>
+          <span v-else-if="emailActive && emailError">{{ emailError }}</span>
           <label class="formControls_label" for="pwd">密碼</label>
           <input
             class="formControls_input"
