@@ -271,7 +271,7 @@ nav ul a span {
 
 @media (max-width: 576px) {
   nav ul .todo_sm {
-    display: none;
+    /* display: none; */
   }
 }
 

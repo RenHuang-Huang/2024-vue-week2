@@ -158,12 +158,11 @@ const filteredTodos = computed(() => {
   <!-- ToDo List -->
   <div id="todoListPage" class="bg-half">
     <nav>
-      <a>
+      <a style="width: 45%">
         <img
           class="logoImg"
           src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/logo.png"
-          alt=""
-          style="width: 45%" />
+          alt="" />
       </a>
       <ul>
         <li class="todo_sm">
