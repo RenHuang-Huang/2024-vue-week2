@@ -162,7 +162,8 @@ const filteredTodos = computed(() => {
         <img
           class="logoImg"
           src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/todolist/logo.png"
-          alt="" />
+          alt=""
+          style="max-width: 300px" />
       </a>
       <ul>
         <li class="todo_sm">
