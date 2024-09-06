@@ -26,17 +26,18 @@ const login = async () => {
 
   try {
     isLoading.value = true
-    await axios
-      .post(`${apiUrl}/users/sign_in`, {
-        email: email.value,
-        password: password.value
-      })
-      .then((res) => {
-        email.value = ''
-        password.value = ''
-        document.cookie = `todolistToken=${res.data.token}`
-        router.push({ path: '/todolist' })
-      })
+    const res = await axios.post(`${apiUrl}/users/sign_in`, {
+      email: email.value,
+      password: password.value
+    })
+    email.value = ''
+    password.value = ''
+
+    const expires = new Date()
+    expires.setTime(expires.getTime() + 3600 * 1000) // token 1 hour 有效
+    document.cookie = `todolistToken=${res.data.token}; expires=${expires.toUTCString()}; path=/; SameSite=Strict`
+
+    router.push({ path: '/todolist' })
   } catch (error) {
     showAlert('登入失敗', error.response.data.message, 'error', '確認')
   } finally {
@@ -96,17 +97,17 @@ const errorEmail = computed(() => {
             required
             v-model="password"
             v-on:change="passwordActive = true" />
-          <span v-if="passwordActive && password.length < 6"
-            >密碼不得少於6個字</span
-          >
+          <span v-if="passwordActive && password.length < 6">
+            密碼不得少於6個字
+          </span>
           <input
             class="formControls_btnSubmit"
             type="button"
             value="登入"
             v-on:click.prevent="login" />
-          <RouterLink class="formControls_btnLink" to="/signUp"
-            >註冊帳號</RouterLink
-          >
+          <RouterLink class="formControls_btnLink" to="/signUp">
+            註冊帳號
+          </RouterLink>
         </form>
       </div>
     </div>

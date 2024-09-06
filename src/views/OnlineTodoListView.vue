@@ -40,13 +40,11 @@ const checkout = async () => {
       /(?:(?:^|.*;\s*)todolistToken\s*\=\s*([^;]*).*$)|^.*$/,
       '$1'
     )
-    await axios.get(`${apiUrl}/users/checkout`).then((res) => {
-      if (res.data.nickname.trim() !== '') {
-        userName.value = res.data.nickname
-      }
-    })
+    const res = await axios.get(`${apiUrl}/users/checkout`)
+    if (res.data.nickname.trim() !== '') {
+      userName.value = res.data.nickname
+    }
   } catch (error) {
-    console.log(error.response)
     if (axios.defaults.headers.common['Authorization'] === '') {
       showAlert('錯誤', 'Token遺失 請重新登入', 'error', '確認')
       router.push({ path: '/login' })
@@ -61,11 +59,11 @@ const checkout = async () => {
 const logout = async () => {
   try {
     isLoading.value = true
-    await axios.post(`${apiUrl}/users/sign_out`, {}).then((res) => {
-      showAlert('成功', res.data.message, 'success', '確認')
-      document.cookie = 'todolistToken=;Max-Age=-1;'
-      router.push({ path: '/login' })
-    })
+    const res = await axios.post(`${apiUrl}/users/sign_out`, {})
+    showAlert('成功', res.data.message, 'success', '確認')
+    document.cookie =
+      'todolistToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+    router.push({ path: '/login' })
   } catch (error) {
     showAlert('錯誤', error.response.data.message, 'error', '確認')
   } finally {
@@ -78,9 +76,8 @@ const todos = ref([])
 const getTodos = async () => {
   try {
     isLoading.value = true
-    await axios.get(`${apiUrl}/todos`).then((res) => {
-      todos.value = res.data.data
-    })
+    const res = await axios.get(`${apiUrl}/todos`)
+    todos.value = res.data.data
   } catch (error) {
     showAlert('錯誤', error.response.data.message, 'error', '確認')
   } finally {
@@ -96,12 +93,9 @@ const addTodo = async () => {
     return showAlert('錯誤', '請輸入待辦事項', 'error', '確認')
   }
   try {
-    await axios
-      .post(`${apiUrl}/todos`, { content: newTodo.value })
-      .then((res) => {
-        newTodo.value = ''
-        todos.value.push(res.data.newTodo)
-      })
+    const res = await axios.post(`${apiUrl}/todos`, { content: newTodo.value })
+    newTodo.value = ''
+    todos.value.push(res.data.newTodo)
   } catch (error) {
     showAlert('錯誤', error.response.data.message, 'error', '確認')
   }
@@ -110,11 +104,10 @@ const addTodo = async () => {
 // 刪除待辦
 const handelDeleteTodo = async (id) => {
   try {
-    await axios.delete(`${apiUrl}/todos/${id}`).then((res) => {
-      if (res.data.status) {
-        todos.value = todos.value.filter((todo) => todo.id !== id)
-      }
-    })
+    const res = await axios.delete(`${apiUrl}/todos/${id}`)
+    if (res.data?.status) {
+      todos.value = todos.value.filter((todo) => todo.id !== id)
+    }
   } catch (error) {
     showAlert('錯誤', error.response.data.message, 'error', '確認')
   }
@@ -123,15 +116,14 @@ const handelDeleteTodo = async (id) => {
 // 完成待辦
 const handelCompletedTodo = async (id) => {
   try {
-    await axios.patch(`${apiUrl}/todos/${id}/toggle`, {}).then((res) => {
-      if (res.data?.status) {
-        todos.value.filter((todo) => {
-          if (todo.id === id) {
-            todo.status = !todo.status
-          }
-        })
-      }
-    })
+    const res = await axios.patch(`${apiUrl}/todos/${id}/toggle`, {})
+    if (res.data?.status) {
+      todos.value.filter((todo) => {
+        if (todo.id === id) {
+          todo.status = !todo.status
+        }
+      })
+    }
   } catch (error) {
     showAlert('錯誤', error.response.data.message, 'error', '確認')
   }
@@ -194,23 +186,23 @@ const filteredTodos = computed(() => {
             <li>
               <a
                 v-bind:class="{ active: currentTab === 'all' }"
-                v-on:click="currentTab = 'all'"
-                >全部</a
-              >
+                v-on:click="currentTab = 'all'">
+                全部
+              </a>
             </li>
             <li>
               <a
                 v-bind:class="{ active: currentTab === 'pending' }"
-                v-on:click="currentTab = 'pending'"
-                >待完成</a
-              >
+                v-on:click="currentTab = 'pending'">
+                待完成
+              </a>
             </li>
             <li>
               <a
                 v-bind:class="{ active: currentTab === 'completed' }"
-                v-on:click="currentTab = 'completed'"
-                >已完成</a
-              >
+                v-on:click="currentTab = 'completed'">
+                已完成
+              </a>
             </li>
           </ul>
           <div class="todoList_items">

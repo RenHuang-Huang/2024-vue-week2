@@ -39,19 +39,16 @@ const signUp = async () => {
   }
   try {
     isLoading.value = true
-    await axios
-      .post(`${apiUrl}/users/sign_up`, {
-        email: signUpEmail.value,
-        password: signUpPassword.value,
-        nickname: signUpName.value
-      })
-      .then((res) => {
-        showAlert('成功', '註冊成功', 'success', '確認')
-        signUpEmail.value = ''
-        signUpPassword.value = ''
-        signUpName.value = ''
-        router.push({ path: '/login' })
-      })
+    const res = await axios.post(`${apiUrl}/users/sign_up`, {
+      email: signUpEmail.value,
+      password: signUpPassword.value,
+      nickname: signUpName.value
+    })
+    showAlert('成功', '註冊成功', 'success', '確認')
+    signUpEmail.value = ''
+    signUpPassword.value = ''
+    signUpName.value = ''
+    router.push({ path: '/login' })
   } catch (error) {
     showAlert(
       '錯誤',
@@ -96,6 +93,7 @@ const errorEmail = computed(() => {
           <label class="formControls_label" for="email">Email</label>
           <input
             class="formControls_input"
+            id="email"
             type="text"
             name="email"
             placeholder="請輸入 email"
@@ -103,14 +101,15 @@ const errorEmail = computed(() => {
             v-model="signUpEmail"
             v-on:change="signUpEmailActive = true" />
           <span v-if="signUpEmailActive && !signUpEmail">此欄位不可留空</span>
-          <span v-else-if="signUpEmailActive && errorEmail">{{
-            errorEmail
-          }}</span>
+          <span v-else-if="signUpEmailActive && errorEmail">
+            {{ errorEmail }}
+          </span>
           <label class="formControls_label" for="name">您的暱稱</label>
           <input
             class="formControls_input"
             type="text"
             name="name"
+            id="name"
             placeholder="請輸入您的暱稱"
             required
             v-model="signUpName"
@@ -121,25 +120,27 @@ const errorEmail = computed(() => {
             class="formControls_input"
             type="password"
             name="pwd"
+            id="pwd"
             placeholder="請輸入密碼"
             required
             v-model="signUpPassword"
             v-on:change="signUpPasswordActive = true" />
-          <span v-if="signUpPasswordActive && !signUpPassword"
-            >此欄位不可留空</span
-          >
+          <span v-if="signUpPasswordActive && !signUpPassword">
+            此欄位不可留空
+          </span>
           <label class="formControls_label" for="pwd2">再次輸入密碼</label>
           <input
             class="formControls_input"
             type="password"
             name="pwd2"
+            id="pwd2"
             placeholder="請再次輸入密碼"
             required
             v-model="signUpPassword2"
             v-on:change="signUpPassword2Active = true" />
-          <span v-if="signUpPassword2Active && !signUpPassword2"
-            >此欄位不可留空</span
-          >
+          <span v-if="signUpPassword2Active && !signUpPassword2">
+            此欄位不可留空
+          </span>
           <input
             class="formControls_btnSubmit"
             type="button"
