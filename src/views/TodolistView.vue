@@ -4,13 +4,25 @@
     <div class="page">
       <h2>註冊</h2>
       <label for="Email">信箱：</label>
-      <input type="email" name="Email" placeholder="Email" v-model="regestEmail" />
+      <input
+        type="email"
+        name="Email"
+        placeholder="Email"
+        v-model="regestEmail" />
       <br />
       <label for="Password">密碼：</label>
-      <input type="password" name="Password" placeholder="Password" v-model="regestPassword" />
+      <input
+        type="password"
+        name="Password"
+        placeholder="Password"
+        v-model="regestPassword" />
       <br />
       <label for="Nickname">名稱：</label>
-      <input type="text" name="Nickname" placeholder="Nickname" v-model="regestNickname" />
+      <input
+        type="text"
+        name="Nickname"
+        placeholder="Nickname"
+        v-model="regestNickname" />
       <br />
       <button type="button" v-on:click="regest">註冊</button>
       <button type="button" v-on:click="switchPage">我要登入</button>
@@ -24,10 +36,18 @@
     <div class="page">
       <h2>登入</h2>
       <label for="email">信箱：</label>
-      <input type="text" name="email" placeholder="Email" v-model="loginEmail" />
+      <input
+        type="text"
+        name="email"
+        placeholder="Email"
+        v-model="loginEmail" />
       <br />
       <label for="password">密碼：</label>
-      <input type="password" name="password" placeholder="Password" v-model="loginPassword" />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        v-model="loginPassword" />
       <br />
       <button type="button" v-on:click="login">登入</button>
       <button type="button" v-on:click="switchPage">我要註冊</button>
@@ -56,17 +76,26 @@
     <div class="page">
       <h2>待辦清單</h2>
       <label for="newtodo">新增待辦：</label>
-      <input type="text" name="newtodo" placeholder="New Todo" v-model="newTodo" />
+      <input
+        type="text"
+        name="newtodo"
+        placeholder="New Todo"
+        v-model="newTodo" />
       <button type="button" v-on:click="addTodo">Add Todo</button>
       <br />
       <h3>待辦事項：</h3>
       <ul>
         <li v-for="todo in todos" v-bind:key="todo.id">
           {{ todo.content }} | {{ todo.status ? '已完成' : '未完成' }}
-          <input type="text" placeholder="New Name" @change="updateEdit($event, todo.id)" />
+          <input
+            type="text"
+            placeholder="New Name"
+            @change="updateEdit($event, todo.id)" />
           <button type="button" v-on:click="onUpdated(todo.id)">更新</button>
           <button type="button" v-on:click="onDelected(todo.id)">刪除</button>
-          <button type="button" v-on:click="onFinished(todo.id)">更新狀態</button>
+          <button type="button" v-on:click="onFinished(todo.id)">
+            更新狀態
+          </button>
         </li>
       </ul>
       <hr />
@@ -103,20 +132,17 @@ const pageRegestStatus = ref(false)
 const pageTodoStatus = ref(false)
 const regest = async () => {
   try {
-    await axios
-      .post(`${apiUrl}/users/sign_up`, {
-        email: regestEmail.value,
-        password: regestPassword.value,
-        nickname: regestNickname.value
-      })
-      .then((res) => {
-        console.log(res.data)
-        alert('註冊成功')
-        regestEmail.value = ''
-        regestPassword.value = ''
-        regestNickname.value = ''
-        regestToken.value = res.data.uid
-      })
+    const res = await axios.post(`${apiUrl}/users/sign_up`, {
+      email: regestEmail.value,
+      password: regestPassword.value,
+      nickname: regestNickname.value
+    })
+    console.log(res.data)
+    alert('註冊成功')
+    regestEmail.value = ''
+    regestPassword.value = ''
+    regestNickname.value = ''
+    regestToken.value = res.data.uid
   } catch (error) {
     console.log(error)
   }
@@ -124,20 +150,17 @@ const regest = async () => {
 
 const login = async () => {
   try {
-    await axios
-      .post(`${apiUrl}/users/sign_in`, {
-        email: loginEmail.value,
-        password: loginPassword.value
-      })
-      .then((res) => {
-        console.log(res.data)
-        loginEmail.value = ''
-        loginPassword.value = ''
-        loginToken.value = res.data.token
-        document.cookie = `todolistToken=${res.data.token}`
-        getTodo()
-        switchTodoPage()
-      })
+    const res = await axios.post(`${apiUrl}/users/sign_in`, {
+      email: loginEmail.value,
+      password: loginPassword.value
+    })
+    console.log(res.data)
+    loginEmail.value = ''
+    loginPassword.value = ''
+    loginToken.value = res.data.token
+    document.cookie = `todolistToken=${res.data.token}`
+    getTodo()
+    switchTodoPage()
   } catch (error) {
     console.log(error)
   }
@@ -152,11 +175,10 @@ const checkout = async () => {
       }
     }
 
-    await axios.get(`${apiUrl}/users/checkout`, config).then((res) => {
-      console.log(res.data)
-      checkoutToken.value = ''
-      loginStatus.value = `Token: ${res.data.uid}`
-    })
+    const res = await axios.get(`${apiUrl}/users/checkout`, config)
+    console.log(res.data)
+    checkoutToken.value = ''
+    loginStatus.value = `Token: ${res.data.uid}`
   } catch (error) {
     console.log(error)
     loginStatus.value = `驗證失敗： ${error.message}`
@@ -170,10 +192,9 @@ const signOut = async () => {
         Authorization: signOutToken.value
       }
     }
-    await axios.post(`${apiUrl}/users/sign_out`, {}, config).then((res) => {
-      signOutStatus.value = res.data.message
-      console.log(res.data)
-    })
+    const res = await axios.post(`${apiUrl}/users/sign_out`, {}, config)
+    signOutStatus.value = res.data.message
+    console.log(res.data)
   } catch (error) {
     console.log(error)
     signOutStatus.value = error.response.data.message
@@ -187,12 +208,11 @@ const signOut2 = async () => {
         Authorization: loginToken.value
       }
     }
-    await axios.post(`${apiUrl}/users/sign_out`, {}, config).then((res) => {
-      signOutStatus.value = res.data.message
-      console.log(res.data)
-      pageTodoStatus.value = false
-      pageLoginStatus.value = true
-    })
+    const res = await axios.post(`${apiUrl}/users/sign_out`, {}, config)
+    signOutStatus.value = res.data.message
+    console.log(res.data)
+    pageTodoStatus.value = false
+    pageLoginStatus.value = true
   } catch (error) {
     console.log(error)
     signOutStatus.value = error.response.data.message
@@ -207,10 +227,13 @@ const addTodo = async () => {
         Authorization: loginToken.value
       }
     }
-    await axios.post(`${apiUrl}/todos`, { content: newTodo.value }, config).then((res) => {
-      console.log(res.data)
-      getTodo()
-    })
+    const res = await axios.post(
+      `${apiUrl}/todos`,
+      { content: newTodo.value },
+      config
+    )
+    console.log(res.data)
+    getTodo()
   } catch (error) {
     console.log(error)
   }
@@ -223,10 +246,9 @@ const getTodo = async () => {
         Authorization: loginToken.value
       }
     }
-    await axios.get(`${apiUrl}/todos`, config).then((res) => {
-      console.log(res.data.data)
-      todos.value = res.data.data
-    })
+    const res = await axios.get(`${apiUrl}/todos`, config)
+    console.log(res.data.data)
+    todos.value = res.data.data
   } catch (error) {
     console.log(error)
   }
@@ -248,13 +270,14 @@ const onUpdated = async (id) => {
         Authorization: loginToken.value
       }
     }
-    await axios
-      .put(`${apiUrl}/todos/${id}`, { content: tempValue.value.content }, config)
-      .then((res) => {
-        console.log(res.data)
-        tempValue.value = ''
-        getTodo()
-      })
+    const res = await axios.put(
+      `${apiUrl}/todos/${id}`,
+      { content: tempValue.value.content },
+      config
+    )
+    console.log(res.data)
+    tempValue.value = ''
+    getTodo()
   } catch (error) {
     console.log(error)
   }
@@ -267,10 +290,9 @@ const onDelected = async (id) => {
         Authorization: loginToken.value
       }
     }
-    await axios.delete(`${apiUrl}/todos/${id}`, config).then((res) => {
-      console.log(res.data)
-      getTodo()
-    })
+    const res = await axios.delete(`${apiUrl}/todos/${id}`, config)
+    console.log(res.data)
+    getTodo()
   } catch (error) {
     console.log(error)
   }
@@ -283,10 +305,9 @@ const onFinished = async (id) => {
         Authorization: loginToken.value
       }
     }
-    await axios.patch(`${apiUrl}/todos/${id}/toggle`, {}, config).then((res) => {
-      console.log(res.data)
-      getTodo()
-    })
+    const res = await axios.patch(`${apiUrl}/todos/${id}/toggle`, {}, config)
+    console.log(res.data)
+    getTodo()
   } catch (error) {
     console.log(error)
   }

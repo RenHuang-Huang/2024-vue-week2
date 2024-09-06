@@ -20,14 +20,19 @@ const updateQuantity = (event) => {
 
 <template>
   <td>
-    <button type="button" class="btn btn-sm" v-on:click="deleteItem(props.id)">X</button>
+    <button type="button" class="btn btn-sm" v-on:click="deleteItem(props.id)">
+      X
+    </button>
   </td>
   <td>{{ props.name }}</td>
   <td>
     <small>{{ props.description }}</small>
   </td>
   <td>
-    <select class="form-select" :value="props.quantity" v-on:change.prevent="updateQuantity">
+    <select
+      class="form-select"
+      :value="props.quantity"
+      v-on:change.prevent="updateQuantity">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>

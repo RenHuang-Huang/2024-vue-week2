@@ -97,12 +97,12 @@ const submit = () => {
         <!-- 菜單 -->
         <div class="col-md-4">
           <div class="list-group" v-for="item in items" v-bind:key="item.id">
-            <Menu 
-            v-bind:id="item.id" 
-            v-bind:name="item.name" 
-            v-bind:price="item.price" 
-            v-bind:description="item.description" 
-            v-on:add-to-cart="handleAddToCart(item)" />
+            <Menu
+              v-bind:id="item.id"
+              v-bind:name="item.name"
+              v-bind:price="item.price"
+              v-bind:description="item.description"
+              v-on:add-to-cart="handleAddToCart(item)" />
           </div>
         </div>
 
@@ -135,14 +135,23 @@ const submit = () => {
           <div class="text-end mb-3">
             <h5>
               總計:
-              <span>{{
-                computed(() => {
-                  return carts.reduce((acc, item) => acc + item.price * item.quantity, 0)
-                })
-              }}</span>
+              <span>
+                {{
+                  computed(() => {
+                    return carts.reduce(
+                      (acc, item) => acc + item.price * item.quantity,
+                      0
+                    )
+                  })
+                }}
+              </span>
             </h5>
           </div>
-          <textarea class="form-control mb-3" rows="3" placeholder="備註" v-model="note"></textarea>
+          <textarea
+            class="form-control mb-3"
+            rows="3"
+            placeholder="備註"
+            v-model="note"></textarea>
           <div class="text-end">
             <button class="btn btn-primary" v-on:click="submit()">送出</button>
           </div>
@@ -174,15 +183,16 @@ const submit = () => {
                     </thead>
                     <tbody>
                       <tr v-for="item in order" v-bind:key="item.id">
-                        <Order 
-                        v-bind:name="item.name" 
-                        v-bind:quantity="item.quantity" 
-                        v-bind:price="item.price" />
+                        <Order
+                          v-bind:name="item.name"
+                          v-bind:quantity="item.quantity"
+                          v-bind:price="item.price" />
                       </tr>
                     </tbody>
                   </table>
                   <div class="text-end">
-                    備註: <span>{{ order.note }}</span>
+                    備註:
+                    <span>{{ order.note }}</span>
                   </div>
                   <div class="text-end">
                     <h5>
@@ -190,7 +200,13 @@ const submit = () => {
                       <span>
                         ${{
                           computed(() => {
-                            return order === undefined ? '' : order.reduce((acc, item) => acc + item.price * item.quantity, 0)
+                            return order === undefined
+                              ? ''
+                              : order.reduce(
+                                  (acc, item) =>
+                                    acc + item.price * item.quantity,
+                                  0
+                                )
                           })
                         }}
                       </span>
